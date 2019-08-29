@@ -51,7 +51,7 @@ export default class Tasks extends Component {
         </div>
       );
     }
-    return <+ tasks={tasks} onTaskClick={this.onTaskClick} />;
+    return <TaskList tasks={tasks} onTaskClick={this.onTaskClick} />;
   };
 
   renderTaskDetail = routeProps => {
