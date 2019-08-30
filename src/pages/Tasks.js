@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 
-import { Route, Link } from "react-router-dom";
+import { Route } from "react-router-dom";
 import axios from "axios";
-import { Spinner, Form, Row, FormGroup, Label, Input, Col } from "reactstrap";
+import { Spinner, Form, Row, Col } from "reactstrap";
 import TaskList from "../components/TaskList";
+import Input from '../components/Input'
 
 export default class Tasks extends Component {
   state = {
@@ -69,7 +70,7 @@ export default class Tasks extends Component {
         </div> 
       );
     }
-    return <TaskList 
+    return <TaskList  
       tasks={filteredTasks} 
       onTaskClick={this.onTaskClick}
       highlight={serchValue}
@@ -102,14 +103,12 @@ export default class Tasks extends Component {
       <Form>
         <Row form>
           <Col md={6}>
-            <FormGroup>
-               <Label for="todo-search">Filtro</Label>
-                <Input type="text" 
-                name="todo-search"
+              <Input 
+                label="Filtro"
                 id="todo-search"
+                type="text" 
                 placeholder="Buscar tarefas"
                 onChange={this.onSearchChange} />
-            </FormGroup>
           </Col>
         </Row>
       </Form>
