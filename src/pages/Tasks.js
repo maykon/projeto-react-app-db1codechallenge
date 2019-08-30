@@ -2,12 +2,14 @@ import React, { Component } from "react";
 
 import { Route, Link } from "react-router-dom";
 import axios from "axios";
-import { Spinner } from "reactstrap";
+import { Spinner, Form, Row, FormGroup, Label, Input, Col } from "reactstrap";
 import TaskList from "../components/TaskList";
 
 export default class Tasks extends Component {
   state = {
     tasks: [],
+    filteredTasks: [],
+    serchValue: '',
     fetching: false
   };
 
@@ -21,7 +23,9 @@ export default class Tasks extends Component {
       .get("https://jsonplaceholder.typicode.com/todos")
       .then(response => {
         const { data } = response;
-        this.setState({ tasks: data });
+        this.setState({ 
+          tasks: data,
+          filteredTasks: data });
       })
       .catch(error => {
         console.warn(error);
@@ -35,8 +39,22 @@ export default class Tasks extends Component {
     this.props.history.push(`/tarefas/${task.id}`);
   };
 
+  onSearchChange = event => {
+    const { value } = event.target;
+    const { tasks } = this.state;
+
+    const filteredTasks = tasks.filter(task => {
+      return task.title.includes(value)
+    })
+
+    this.setState({
+      filteredTasks,
+      serchValue: value
+    })
+  }
+
   renderTasks = () => {
-    const { fetching, tasks } = this.state;
+    const { fetching, filteredTasks, serchValue } = this.state;
     if (fetching) {
       return (
         <div>
@@ -48,10 +66,14 @@ export default class Tasks extends Component {
           <Spinner color="info" />
           <Spinner color="light" />
           <Spinner color="dark" />
-        </div>
+        </div> 
       );
     }
-    return <TaskList tasks={tasks} onTaskClick={this.onTaskClick} />;
+    return <TaskList 
+      tasks={filteredTasks} 
+      onTaskClick={this.onTaskClick}
+      highlight={serchValue}
+     />;
   };
 
   renderTaskDetail = routeProps => {
@@ -75,10 +97,30 @@ export default class Tasks extends Component {
     <Route path="/tarefas/:taskId" render={this.renderTaskDetail} />
   );
 
+  renderFilter = () => {
+    return (
+      <Form>
+        <Row form>
+          <Col md={6}>
+            <FormGroup>
+               <Label for="todo-search">Filtro</Label>
+                <Input type="text" 
+                name="todo-search"
+                id="todo-search"
+                placeholder="Buscar tarefas"
+                onChange={this.onSearchChange} />
+            </FormGroup>
+          </Col>
+        </Row>
+      </Form>
+    )
+  }
+
   render() {
     return (
       <div>
         <h1>Página de tarefas</h1>
+        {this.renderFilter()}
         {this.renderTasks()}
         {this.renderTaskRoute()}
       </div>
