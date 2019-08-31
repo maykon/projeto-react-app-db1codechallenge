@@ -44,22 +44,6 @@ class PostForm extends Component {
           validate={validatePostDescription}
           render={this.renderFieldDescription}
         />
-        <InputField
-          name="description2"
-          label="Descrição 2: "
-          type="textarea"
-          rows={3}
-          validate={validatePostDescription}
-          render={this.renderFieldDescription}
-        />
-        <InputField
-          name="description3"
-          label="Descrição 3: "
-          type="textarea"
-          rows={3}
-          validate={validatePostDescription}
-          render={this.renderFieldDescription}
-        />
         <Button color="primary" type="submit" disabled={submitting || pristine}>
           {submitting && <Spinner size="sm" />}
           Postar
