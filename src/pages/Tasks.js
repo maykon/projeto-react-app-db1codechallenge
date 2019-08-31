@@ -4,13 +4,13 @@ import { Route } from "react-router-dom";
 import axios from "axios";
 import { Spinner, Form, Row, Col } from "reactstrap";
 import TaskList from "../components/TaskList";
-import Input from '../components/Input'
+import Input from "../components/Input";
 
 export default class Tasks extends Component {
   state = {
     tasks: [],
     filteredTasks: [],
-    serchValue: '',
+    serchValue: "",
     fetching: false
   };
 
@@ -24,9 +24,10 @@ export default class Tasks extends Component {
       .get("https://jsonplaceholder.typicode.com/todos")
       .then(response => {
         const { data } = response;
-        this.setState({ 
+        this.setState({
           tasks: data,
-          filteredTasks: data });
+          filteredTasks: data
+        });
       })
       .catch(error => {
         console.warn(error);
@@ -40,19 +41,21 @@ export default class Tasks extends Component {
     this.props.history.push(`/tarefas/${task.id}`);
   };
 
-  onSearchChange = event => {
+  onSearchChange = (event, isValid) => {
+    if (!isValid) return;
+
     const { value } = event.target;
     const { tasks } = this.state;
 
     const filteredTasks = tasks.filter(task => {
-      return task.title.includes(value)
-    })
+      return task.title.includes(value);
+    });
 
     this.setState({
       filteredTasks,
       serchValue: value
-    })
-  }
+    });
+  };
 
   renderTasks = () => {
     const { fetching, filteredTasks, serchValue } = this.state;
@@ -67,14 +70,16 @@ export default class Tasks extends Component {
           <Spinner color="info" />
           <Spinner color="light" />
           <Spinner color="dark" />
-        </div> 
+        </div>
       );
     }
-    return <TaskList  
-      tasks={filteredTasks} 
-      onTaskClick={this.onTaskClick}
-      highlight={serchValue}
-     />;
+    return (
+      <TaskList
+        tasks={filteredTasks}
+        onTaskClick={this.onTaskClick}
+        highlight={serchValue}
+      />
+    );
   };
 
   renderTaskDetail = routeProps => {
@@ -103,17 +108,23 @@ export default class Tasks extends Component {
       <Form>
         <Row form>
           <Col md={6}>
-              <Input 
-                label="Filtro"
-                id="todo-search"
-                type="text" 
-                placeholder="Buscar tarefas"
-                onChange={this.onSearchChange} />
+            <Input
+              label="Filtro"
+              id="todo-search"
+              type="text"
+              placeholder="Buscar tarefas"
+              onChange={this.onSearchChange}
+              validate={value =>
+                !value || value.length > 3
+                  ? undefined
+                  : "Deve ter pelo menos 3 caracteres."
+              }
+            />
           </Col>
         </Row>
       </Form>
-    )
-  }
+    );
+  };
 
   render() {
     return (
