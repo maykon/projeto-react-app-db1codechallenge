@@ -1,22 +1,33 @@
 import React from "react";
-import { ListGroup, ListGroupItem } from "reactstrap";
+import { ListGroup, ListGroupItem, Button } from "reactstrap";
 import { connect } from "react-redux";
+import { removePostAction } from "../../redux/posts";
 
-export const PostList = ({ posts }) => (
-  <ListGroup>
-    {posts.map((post, index) => (
-      <ListGroupItem key={index}>{post.description}</ListGroupItem>
-    ))}
-  </ListGroup>
-);
+export const PostList = ({ posts, removePost }) => {
+  return (
+    <>
+      <ListGroup>
+        {posts.map((post, index) => (
+          <ListGroupItem key={index}>
+            {post.description} <Button close onClick={e => removePost(index)} />
+          </ListGroupItem>
+        ))}
+      </ListGroup>
+    </>
+  );
+};
 
 const mapStateToProps = state => ({
   posts: state.posts
 });
 
+const mapDispatchToProps = {
+  removePost: removePostAction
+};
+
 const PostListConnected = connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(PostList);
 
 export default PostListConnected;
