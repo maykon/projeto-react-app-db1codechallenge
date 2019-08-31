@@ -85,7 +85,7 @@ class Tasks extends Component {
   renderTaskDetail = routeProps => {
     const { taskId } = routeProps.match.params;
     const { tasks } = this.props;
-    const task = tasks.find(item => item.id === parseInt(taskId));
+    const task = tasks.data.find(item => item.id === parseInt(taskId));
     if (!task) {
       return null;
     }
